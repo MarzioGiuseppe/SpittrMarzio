@@ -1,0 +1,105 @@
+apply plugin: 'eclipse'
+apply plugin: 'war'
+//apply plugin: 'eclipse-wtp'
+apply plugin: 'eclipse-tomcat'
+apply plugin: 'maven'
+
+group = 'spittr'
+version = '1.0.0'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+
+ext{
+    springVersion = '4.3.6.RELEASE'
+    h2Version = '1.4.185'
+    hibernateValidatorVersion = '4.3.2.Final'
+    commonsLangVersion =  '3.4'
+    jspApiVersion = '2.2'
+    servletApiVersion = '3.0.1'
+    jstlVersion = '1.2'
+    jspElVersion = '3.0.0'
+    junitVersion = '4.10'
+    mockitoVersion  = '2.7.7'
+    hamcrestVersion = '1.2'
+    databindVersion = '2.8.6'
+}
+
+dependencies {
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-jdbc:$springVersion"
+    //compile "com.h2database:h2:$h2Version"
+    compile "org.hibernate:hibernate-validator:$hibernateValidatorVersion"
+    //compile "javax.validation:validation-api:1.1.0.Final"
+    compile "org.apache.commons:commons-lang3:$commonsLangVersion"
+    compile "javax.servlet:jstl:$jstlVersion"
+    compile "org.apache.tomcat:jasper:6.0.48"
+    compile "org.slf4j:jcl-over-slf4j:1.7.5"
+    compile "org.jboss.logging:jboss-logging:3.1.0.GA"
+    compile "com.fasterxml.jackson.core:jackson-databind:$databindVersion"
+    
+    providedCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+    providedCompile "javax.servlet.jsp:jsp-api:$jspApiVersion"
+    providedCompile "javax.el:javax.el-api:$jspElVersion"
+
+	//ex testCompile:
+    compile "junit:junit-dep:$junitVersion"
+    compile "org.springframework:spring-test:$springVersion"
+    compile "org.mockito:mockito-core:$mockitoVersion"
+    compile "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.2'
+    
+    //compile fileTree(dir: 'libs', include: '*.jar')
+    
+}
+
+// nota Marzio: se usi il jar direttamente in tomcat, devi abilitare questo:
+configurations.all{
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+repositories {
+    //maven { url 'http://maven.springframework.org/release' }
+    //maven { url 'http://maven.springframework.org/milestone' }
+    //maven { url 'http://maven.springframework.org/snapshot' }
+    //maven { url 'http://download.java.net/maven/2' }
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        maven { url 'http://jcenter.bintray.com' }
+    }
+    dependencies {
+        classpath 'com.anjlab:gradle-sysdeo-tomcat-plugin:1.0.7'
+    }
+}
+
+eclipseTomcat {
+    rootDir 'src/main/webapp'
+    exportSource false
+    reloadable true
+    redirectLogger true
+    updateXml true
+    warLocation ''
+    webPath '/spittr'
+    excludeClasspath.addAll(['org.slf4j'])
+}
+
+war {
+        baseName = 'spittrMarzio'
+        from 'src' 		// adds a file-set to the root of the archive: 
+        webInf { from 'WebContent/WEB-INF/views' into 'views' } // adds a file-set to the WEB-INF dir.
+    	//classpath fileTree('WebContent/WEB-INF/views') // adds a file-set to the WEB-INF/lib dir.
+    	//classpath configurations.moreLibs // adds a configuration to the WEB-INF/lib dir.
+    	//webxml = file('WebContent/WEB-INF/web.xml') // copies a file to WEB-INF/web.xml
+}
+
+eclipse {
+        wtp {
+                component {
+                        contextPath = 'spittrMarzio'
+                }
+        }
+}
