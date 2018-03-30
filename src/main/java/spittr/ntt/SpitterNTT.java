@@ -15,35 +15,35 @@ import spittr.Spitter;
 @Component
 public class SpitterNTT {
 
-    private List<Spitter> spitterList;
+	private List<Spitter> spitterList;
 
-    public SpitterNTT() {
-	this.spitterList = new ArrayList<Spitter>();
-    }
-    
-
-    public void add(Spitter spitter){
-	if (spitter!=null){
-	    spitterList.add(spitter);
+	public SpitterNTT() {
+		this.spitterList = new ArrayList<Spitter>();
 	}
-    }
 
 
-    /**
-     * @return the spitterList
-     */
-    public List<Spitter> getSpitterList() {
-        return spitterList;
-    }
+	public void add(Spitter spitter){
+		if (spitter!=null){
+			spitterList.add(spitter);
+		}
+	}
 
 
-    /**
-     * @param spitterList the spitterList to set
-     */
-    public void setSpitterList(List<Spitter> spitterList) {
-        this.spitterList = spitterList;
-    }
-    
-    
+	/**
+	 * @return the spitterList
+	 */
+	public List<Spitter> getSpitterList() {
+		return spitterList;
+	}
+
+
+	/**
+	 * @param spitterList the spitterList to set
+	 */
+	public void setSpitterList(List<Spitter> spitterList) {
+		this.spitterList = spitterList;
+	}
+
+
 
 }
